@@ -11,12 +11,11 @@ resource "aws_instance" "webserver" {
 
     user_data = <<-EOF
       #!/bin/sh
-      sudo -i
-      systemctl start nginx
-      systemctl enable nginx
-      systemctl start mariadb
-      systemctl enable mariadb
-      bash /root/apache-tomcat-8.5.97/bin/catalina.sh start
+      sudo apt update -y
+      sudo apt install -y nginx
+      sudo systemctl enable nginx
+      sudo systemctl start nginx
+      bash "<h1.Welcome Team B61 to Nginx</h1>" /var/www/html/index.html
       EOF
 }
 

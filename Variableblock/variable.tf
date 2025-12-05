@@ -1,11 +1,11 @@
 variable "webserver_instance_type" {
-    default = "t3.micro"
+    default = "t2.small"
 }
 variable "webserver_ami" {
     default = "ami-0f00d706c4a80fd93"
 }
 variable "webserver_key_name" {
-    default = "mykey"
+    default = "octa"
 }
 variable "webserver_instance_vpc_security_group_ids" {
     default = "sg-0b4ace81d68dd0b6d"
@@ -14,5 +14,5 @@ variable "webserver_disable_api_termination" {
     default = false
 }
 variable "webserver_count" {
-    default = 2
+    default = 1
 }

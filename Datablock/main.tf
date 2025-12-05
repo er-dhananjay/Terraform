@@ -41,8 +41,23 @@ data "aws_security_group" "data_webserver_sg" {
     name = "launch-wizard-1"  
 }
 data "aws_ami" "ami" {
-    instance_id = ami-0fa3fe0fa7920f68e
+  most_recent = true
+
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-*-x86_64"]
+  }
+
+  filter {
+    name   = "virtualiztion-type"
+    values = ["hvm"]
+  }
+
+  owners      = ["amazon"]
 }
+
+
 data "aws_instance" "data_webserver_id" {
-    name = i-038bc2fed0e40815a   
+    instance_id = i-038bc2fed0e40815a   
 }

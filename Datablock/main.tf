@@ -10,13 +10,14 @@ resource "aws_instance" "webserver" {
   #  count = var.webserver_count
 
     user_data = <<-EOF
-      #!/bin/sh
-      sudo apt update -y
-      sudo apt install -y nginx
-      sudo systemctl enable nginx
-      sudo systemctl start nginx
-      bash "<h1.Welcome Team B61 to Nginx</h1>" /var/www/html/index.html
+      #!/bin/bash
+      apt update -y
+      apt install -y nginx
+      systemctl enable nginx
+      systemctl start nginx
+      echo "<h1>Welcome Team B61 to Nginx</h1>" > /var/www/html/index.html
       EOF
+
 }
 
 resource "aws_security_group" "my-sg" {

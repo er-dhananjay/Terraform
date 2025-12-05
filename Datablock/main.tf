@@ -58,6 +58,6 @@ data "aws_ami" "ami" {
 }
 
 
-data "aws_instance" "data_webserver_id" {
-    instance_id = i-038bc2fed0e40815a   
+data "aws_instance" "data_webserver_instance" {
+    instance_id = "i-038bc2fed0e40815a"  
 }

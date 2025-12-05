@@ -22,8 +22,8 @@ resource "aws_instance" "webserver" {
 
 resource "aws_security_group" "my-sg" {
   ingress {
-    from_port = 0
-    to_port = 65535
+    from_port = 80
+    to_port = 80
     protocol = "TCP"
     cidr_blocks = [ "0.0.0.0/0" ]
   }
@@ -59,5 +59,5 @@ data "aws_ami" "ami" {
 
 
 data "aws_instance" "data_webserver_instance" {
-    instance_id = "i-038bc2fed0e40815a"  
+    instance_id = "i-0dcade0a318891491"  
 }

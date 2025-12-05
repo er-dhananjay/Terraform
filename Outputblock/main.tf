@@ -4,6 +4,9 @@ resource "aws_instance" "webserver" {
     key_name = var.webserver_key_name
     vpc_security_group_ids = [ var.webserver_instance_vpc_security_group_ids , aws_security_group.my-sg.id ]
     disable_api_termination = var.webserver_disable_api_termination
+    tags = {
+      Name = "MyWebServer"
+    }
   #  count = var.webserver_count
 }
 

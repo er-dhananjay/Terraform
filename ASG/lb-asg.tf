@@ -1,10 +1,13 @@
+#########################################
+# Default VPC + Public Subnet Setup
+#########################################
 
-
-# Get default VPC and subnets
+# Get default VPC
 data "aws_vpc" "default" {
   default = true
 }
 
+# Get subnets under default VPC
 data "aws_subnets" "default" {
   filter {
     name   = "vpc-id"
@@ -12,9 +15,42 @@ data "aws_subnets" "default" {
   }
 }
 
-# Security Group for ALB and EC2
-resource "aws_security_group" "web_sg" {
-  name   = "web-sg"
+# Create Internet Gateway for default VPC
+resource "aws_internet_gateway" "default_igw" {
+  vpc_id = data.aws_vpc.default.id
+
+  tags = {
+    Name = "default-igw"
+  }
+}
+
+# Public Route Table
+resource "aws_route_table" "public_rt" {
+  vpc_id = data.aws_vpc.default.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.default_igw.id
+  }
+
+  tags = {
+    Name = "public-route-table"
+  }
+}
+
+# Associate all default subnets to public route table
+resource "aws_route_table_association" "public_assoc" {
+  for_each       = toset(data.aws_subnets.default.ids)
+  subnet_id      = each.value
+  route_table_id = aws_route_table.public_rt.id
+}
+
+#########################################
+# Security Group
+#########################################
+
+resource "aws_security_group" "web_sgroup" {
+  name   = "web-sg1"
   vpc_id = data.aws_vpc.default.id
 
   ingress {
@@ -33,17 +69,20 @@ resource "aws_security_group" "web_sg" {
   }
 }
 
-# ALB
+#########################################
+# Load Balancer
+#########################################
+
 resource "aws_lb" "app_lb" {
   name               = "simple-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.web_sg.id]
+  security_groups    = [aws_security_group.web_sgroup.id]
   subnets            = data.aws_subnets.default.ids
 }
 
-resource "aws_lb_target_group" "tg" {
-  name     = "simple-tg"
+resource "aws_lb_target_group" "tag" {
+  name     = "simple-tag"
   port     = 80
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.default.id
@@ -56,19 +95,22 @@ resource "aws_lb_listener" "listener" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.tg.arn
+    target_group_arn = aws_lb_target_group.tag.arn
   }
 }
 
+#########################################
 # Launch Template
+#########################################
+
 resource "aws_launch_template" "example" {
   name_prefix   = "simple-template-"
-  image_id      = "ami-0fa3fe0fa7920f68e" # Amazon Linux 2 AMI (update as needed)
-  instance_type = "t2.micro"
+  image_id      = "ami-0f00d706c4a80fd93"
+  instance_type = "t3.micro"
 
   network_interfaces {
     associate_public_ip_address = true
-    security_groups             = [aws_security_group.web_sg.id]
+    security_groups             = [aws_security_group.web_sgroup.id]
   }
 
   user_data = base64encode(<<-EOF
@@ -82,14 +124,17 @@ resource "aws_launch_template" "example" {
   )
 }
 
+#########################################
 # Auto Scaling Group
+#########################################
+
 resource "aws_autoscaling_group" "asg" {
-  desired_capacity     = 2
-  max_size             = 3
-  min_size             = 1
-  vpc_zone_identifier  = data.aws_subnets.default.ids
-  target_group_arns    = [aws_lb_target_group.tg.arn]
-  health_check_type    = "ELB"
+  desired_capacity          = 2
+  max_size                  = 3
+  min_size                  = 1
+  vpc_zone_identifier       = data.aws_subnets.default.ids
+  target_group_arns         = [aws_lb_target_group.tag.arn]
+  health_check_type         = "ELB"
   health_check_grace_period = 120
 
   launch_template {
@@ -97,6 +142,10 @@ resource "aws_autoscaling_group" "asg" {
     version = "$Latest"
   }
 }
+
+#########################################
+# Output
+#########################################
 
 output "alb_dns_name" {
   value = aws_lb.app_lb.dns_name

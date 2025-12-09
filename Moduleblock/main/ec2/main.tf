@@ -3,7 +3,7 @@ resource "aws_instance" "web" {
     ami = var.web_ami
     key_name = var.web_key_name
     subnet_id = var.web_subnet_id
-    vpc_security_group_ids = []
+    vpc_security_group_ids = [ var.web_vpc_security_group_ids ]
     disable_api_termination = var.web_disable_api_termination
     user_data = <<-EOF
                 #!/bin/bash

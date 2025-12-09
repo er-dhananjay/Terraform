@@ -6,6 +6,7 @@ module "ec2" {
     web_subnet_id = module.vpc_web_subnet_id
     web_vpc_security_group_ids = module.web_vpc_security_group_ids
     web_disable_api_termination = "false"
+}
 
 module "vpc" {
     source = "C:\Users\DHANANJAY\Desktop\Terraform\Moduleblock\main\vpc"

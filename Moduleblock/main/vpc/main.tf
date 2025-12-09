@@ -9,7 +9,7 @@ resource "aws_subnet" "vpc_web_subnetA" {
 }
 
 resource "aws_security_group" "vpc_web_sg" {
-    vpc_id = aws_vpc.cbz_vpc.id
+    vpc_id = aws_vpc.vpc_web.id
     ingress {
         from_port = 80
         to_port = 80

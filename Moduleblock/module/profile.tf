@@ -1,4 +1,4 @@
-provider ""aws" {
+provider "aws" {
     region = "ap-south-1"
     provider = "configs"
 }

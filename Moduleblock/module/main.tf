@@ -12,5 +12,5 @@ module "vpc" {
     source = "/home/dk/Terraform/Moduleblock/main/vpc"
     vpc_web_cidr = "10.0.0.0/16"
     vpc_web_subnetA = "10.0.1.0/24"
-    vpc_web_public_ip = true
+    vpc_web_public_ip = "true"
 }

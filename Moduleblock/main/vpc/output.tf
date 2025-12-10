@@ -1,25 +1,15 @@
-output "subnet_id" {
-  value = aws_subnet.my_subnetA.id
+output "vpc_web_subnet_id" {
+  value = aws_subnet.vpc_web_subnetA.id
 }
 
-output "vpc_id" {
-  value = aws_vpc.my_vpc.id
+output "vpc_web_vpc_id" {
+  value = aws_vpc.vpc_web.id
 }
 
-output "webserver_sg" {
-  value = aws_security_group.webserver_sg.id
+output "vpc_web_sg" {
+  value = aws_security_group.vpc_web_sg.id
 }
 
-output "webserver_sg_id" {
-  value =  aws_security_group.webserver_sg.id  
-
-}
-
-output "webserver_sg_arn" {
-  value =  aws_security_group.webserver_sg.arn
-
-}
-
-output "vpc_IGW" {
-  value = aws_internet_gateway.my_IGW.id
+output "vpc_web_sg_arn" {
+  value = aws_security_group.vpc_web_sg.arn
 }

@@ -1,5 +1,5 @@
 resource "aws_vpc" "my_vpc" {
-  cidr_block = var.vpc_cidr
+  cidr_block = aws.vpc_cidr
 }
 
 resource "aws_subnet" "my_subnetA" {
@@ -54,3 +54,4 @@ ingress {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+

@@ -3,7 +3,7 @@ variable "user_list" {
 }
 
 variable "my-instance-ami_list" {
-  default = ["ami-068c0051b15cdb816" , "ami-0ecb62995f68bb549"]
+  default = ["ami-02b8269d5e85954ef" , "ami-00ca570c1b6d79f36"]
 }
 
 variable "my-instance-inst-type" {
@@ -11,9 +11,9 @@ variable "my-instance-inst-type" {
 }
 
 variable "my-instance-key_name" {
-  default = "16dec"
+  default = "dk"
 }
 
 variable "my-instance-security_groups" {
-  default = "sg-013ac9044ebaee90e"
+  default = "sg-0f2758b7b37e072cf"
 }
